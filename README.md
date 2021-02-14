@@ -56,11 +56,41 @@ helm install \
 6. Log into dashboard - `istioctl dashboard kiali`
 
 
-### Test Traffic
+### Test With Basic K8 Deployment
 
 1. Install echo-server examples from the [datou-k8](https://github.com/datou-tech/datou-k8#exercise---first-deployment-14) project
-1. Run this script to send traffic to pod - `for ((i=1;i<=10000;i++)); do   curl -v --header "Connection: keep-alive" "localhost:8080/user?uuid=52010&model_id=20&attr=0"; sleep 3; done`
+1. Run this script to send traffic to pod - `for ((i=1;i<=10000;i++)); do   curl -v --header "Connection: keep-alive" "echo-server.info"; sleep 3; done`
 1. Watch the traffic route on the [dashboard](http://localhost:59934/kiali/console/graph/namespaces/?edges=noLabel&graphType=versionedApp&namespaces=default&idleNodes=true&duration=60&refresh=10000&operationNodes=false&idleEdges=false&injectServiceNodes=true&layout=dagre)
+
+
+### Test with Istio Gateway/Virtual Service Deployment
+
+1. Fetch the pertinent host/port information 
+
+```
+export INGRESS_HOST=$(minikube ip)
+export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
+echo $INGRESS_HOST $INGRESS_PORT
+``` 
+
+2. Install the gateway (can replace K8 Ingress as a way to access cluster) and the virtual-service (routing rules for the gateway that route traffic to K8 Services)
+
+```
+kubectl apply -f gateway.yaml
+kubectl apply -f virtual-service.yaml
+```
+
+3. Run this script to send traffic to pod - `while true; do curl -v --header "Connection: keep-alive" "http://<INGRESS_HOST>:<INGRESS_PORT>"; sleep 1; done`
+
+4. Watch the traffic route on the [dashboard](http://localhost:59934/kiali/console/graph/namespaces/?edges=noLabel&graphType=service&namespaces=default&idleNodes=true&duration=60&refresh=10000&operationNodes=false&idleEdges=true&injectServiceNodes=false&layout=dagre)
+
+*NOTE: the ingress in this example will show source traffic from "unknown" because minikube does not have a load balancer to expose an external-ip. For a more complete picture, use a cluster that is hosted on a cloud provider*
+
+### Advanced Next Steps
+1. TODO: highlight jaeger
+1. TODO: highlight grafana
 1. TODO: circuit breaking example
 1. TODO: traffic mirroring example
 1. TODO: fault injection example
+1. TODO: tune gateway and vs (specified hosts, routes, regex etc)
+1. TODO: secure configuration and admin controls
