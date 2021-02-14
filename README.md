@@ -86,9 +86,11 @@ kubectl apply -f virtual-service.yaml
 
 *NOTE: the ingress in this example will show source traffic from "unknown" because minikube does not have a load balancer to expose an external-ip. For a more complete picture, use a cluster that is hosted on a cloud provider*
 
+### Explore More Observability
+1. Grafana Metrics Dashboard - `istioctl dashboard grafana`
+1. Jaeger Tracing - `istioctl dashboard jaeger`
+
 ### Advanced Next Steps
-1. TODO: highlight jaeger
-1. TODO: highlight grafana
 1. TODO: circuit breaking example
 1. TODO: traffic mirroring example
 1. TODO: fault injection example
