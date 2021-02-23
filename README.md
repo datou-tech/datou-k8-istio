@@ -8,13 +8,22 @@ The goal of this project is to provide a guided walkthrough for Istio.
 
 You will need a cluster to run the steps in this project. If you are following the datou series, you will need these projects completed.
 
-- datou-k8 - [set up a local cluster](https://github.com/datou-tech/datou-k8)
+| Step | Description | 
+| -- | -- |
+| Start minikube | [Set up a local cluster](https://github.com/datou-tech/datou-k8) <br/> `minikube start --driver=hyperkit` |
 
 ### Networking Primer
 
 To get the full picture, an understanding of how networking works in a containerized world is important. 
 
 *Coming Soon*
+
+### Set up Networking
+1. Deploy an application 
+1. Expose via service of type Load Balancer
+1. Open minikube tunnel to create external-ip - in a new window `minikube tunnel`
+1. Check the external IP
+1. Create host record 
 
 ### Install Istio
 
@@ -96,3 +105,4 @@ kubectl apply -f virtual-service.yaml
 1. TODO: fault injection example
 1. TODO: tune gateway and vs (specified hosts, routes, regex etc)
 1. TODO: secure configuration and admin controls
+
