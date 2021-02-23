@@ -106,3 +106,4 @@ kubectl apply -f virtual-service.yaml
 1. TODO: tune gateway and vs (specified hosts, routes, regex etc)
 1. TODO: secure configuration and admin controls
 
+
